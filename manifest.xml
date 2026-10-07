@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Anti-Duplicado AL-COX — suplemento do Outlook (New Outlook / Outlook Web / Outlook clássico)
+  ANTES DE INSTALAR: troque TODAS as ocorrências de https://lazarobelo5.github.io/anti-duplicado pelo endereço onde
+  os arquivos foram publicados (ex.: https://seuusuario.github.io/anti-duplicado).
+-->
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
+           xmlns:mailappor="http://schemas.microsoft.com/office/mailappversionoverrides/1.0"
+           xsi:type="MailApp">
+  <Id>41801cf6-d071-4483-8987-8579f5401fa6</Id>
+  <Version>1.0.0.0</Version>
+  <ProviderName>Antonio Lazaro - COX</ProviderName>
+  <DefaultLocale>pt-BR</DefaultLocale>
+  <DisplayName DefaultValue="Anti-Duplicado AL-COX"/>
+  <Description DefaultValue="Bloqueia o envio de e-mail novo com título que já foi usado."/>
+  <IconUrl DefaultValue="https://lazarobelo5.github.io/anti-duplicado/icon-64.png"/>
+  <HighResolutionIconUrl DefaultValue="https://lazarobelo5.github.io/anti-duplicado/icon-128.png"/>
+  <SupportUrl DefaultValue="https://lazarobelo5.github.io/anti-duplicado/taskpane.html"/>
+  <AppDomains>
+    <AppDomain>https://lazarobelo5.github.io/anti-duplicado</AppDomain>
+  </AppDomains>
+  <Hosts>
+    <Host Name="Mailbox"/>
+  </Hosts>
+  <Requirements>
+    <Sets>
+      <Set Name="Mailbox" MinVersion="1.1"/>
+    </Sets>
+  </Requirements>
+  <FormSettings>
+    <Form xsi:type="ItemEdit">
+      <DesktopSettings>
+        <SourceLocation DefaultValue="https://lazarobelo5.github.io/anti-duplicado/taskpane.html"/>
+      </DesktopSettings>
+    </Form>
+  </FormSettings>
+  <Permissions>ReadWriteItem</Permissions>
+  <Rule xsi:type="RuleCollection" Mode="Or">
+    <Rule xsi:type="ItemIs" ItemType="Message" FormType="Edit"/>
+  </Rule>
+  <DisableEntityHighlighting>false</DisableEntityHighlighting>
+
+  <VersionOverrides xmlns="http://schemas.microsoft.com/office/mailappversionoverrides" xsi:type="VersionOverridesV1_0">
+    <VersionOverrides xmlns="http://schemas.microsoft.com/office/mailappversionoverrides/1.1" xsi:type="VersionOverridesV1_1">
+      <Requirements>
+        <bt:Sets DefaultMinVersion="1.12">
+          <bt:Set Name="Mailbox"/>
+        </bt:Sets>
+      </Requirements>
+      <Hosts>
+        <Host xsi:type="MailHost">
+          <Runtimes>
+            <Runtime resid="WebViewRuntime.Url">
+              <Override type="javascript" resid="JSRuntime.Url"/>
+            </Runtime>
+          </Runtimes>
+          <DesktopFormFactor>
+            <FunctionFile resid="Commands.Url"/>
+
+            <!-- Botão na janela de escrever e-mail: abre o histórico de títulos -->
+            <ExtensionPoint xsi:type="MessageComposeCommandSurface">
+              <OfficeTab id="TabDefault">
+                <Group id="grpAntiDup">
+                  <Label resid="Grupo.Label"/>
+                  <Control xsi:type="Button" id="btnHistorico">
+                    <Label resid="Botao.Label"/>
+                    <Supertip>
+                      <Title resid="Botao.Label"/>
+                      <Description resid="Botao.Tip"/>
+                    </Supertip>
+                    <Icon>
+                      <bt:Image size="16" resid="Icon.16"/>
+                      <bt:Image size="32" resid="Icon.32"/>
+                      <bt:Image size="80" resid="Icon.80"/>
+                    </Icon>
+                    <Action xsi:type="ShowTaskpane">
+                      <SourceLocation resid="Taskpane.Url"/>
+                    </Action>
+                  </Control>
+                </Group>
+              </OfficeTab>
+            </ExtensionPoint>
+
+            <!-- Smart Alerts: roda ao clicar em Enviar -->
+            <ExtensionPoint xsi:type="LaunchEvent">
+              <LaunchEvents>
+                <LaunchEvent Type="OnMessageSend" FunctionName="onMessageSendHandler" SendMode="SoftBlock"/>
+              </LaunchEvents>
+              <SourceLocation resid="WebViewRuntime.Url"/>
+            </ExtensionPoint>
+          </DesktopFormFactor>
+        </Host>
+      </Hosts>
+      <Resources>
+        <bt:Images>
+          <bt:Image id="Icon.16" DefaultValue="https://lazarobelo5.github.io/anti-duplicado/icon-16.png"/>
+          <bt:Image id="Icon.32" DefaultValue="https://lazarobelo5.github.io/anti-duplicado/icon-32.png"/>
+          <bt:Image id="Icon.80" DefaultValue="https://lazarobelo5.github.io/anti-duplicado/icon-80.png"/>
+        </bt:Images>
+        <bt:Urls>
+          <bt:Url id="Commands.Url" DefaultValue="https://lazarobelo5.github.io/anti-duplicado/commands.html"/>
+          <bt:Url id="Taskpane.Url" DefaultValue="https://lazarobelo5.github.io/anti-duplicado/taskpane.html"/>
+          <bt:Url id="WebViewRuntime.Url" DefaultValue="https://lazarobelo5.github.io/anti-duplicado/commands.html"/>
+          <bt:Url id="JSRuntime.Url" DefaultValue="https://lazarobelo5.github.io/anti-duplicado/launchevent.js"/>
+        </bt:Urls>
+        <bt:ShortStrings>
+          <bt:String id="Grupo.Label" DefaultValue="Anti-Duplicado"/>
+          <bt:String id="Botao.Label" DefaultValue="Títulos enviados"/>
+        </bt:ShortStrings>
+        <bt:LongStrings>
+          <bt:String id="Botao.Tip" DefaultValue="Ver, importar ou liberar títulos já enviados."/>
+        </bt:LongStrings>
+      </Resources>
+    </VersionOverrides>
+  </VersionOverrides>
+</OfficeApp>
